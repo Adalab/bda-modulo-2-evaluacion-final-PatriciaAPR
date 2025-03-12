@@ -126,20 +126,87 @@ SELECT c.name AS categoria, COUNT(r.rental_id) AS total_alquileres -- aquí sele
 Encuentra el promedio de duración de las películas para cada clasificación de la tabla film y muestra la clasificación junto con el promedio de duración*/
 
 SELECT*
-FROM film
+FROM film; 
 
-SELECT clasificacion, AVG(duracion) AS promedio_duracion  
+SELECT rating, AVG(length) AS promedio_duracion  -- Selecciono la clasificación=rating y calculo el promedio de duración con AVG y con el resultado renombro la columna
 FROM film  
-GROUP BY clasificacion  
-ORDER BY promedio_duracion DESC;
+GROUP BY rating -- agrupo por clasificación =rating --
+ORDER BY promedio_duracion DESC; -- ordeno en orden descendente --
 
 
 /*EJERCICIO_13
  Encuentra el nombre y apellido de los actores que aparecen en la película con title "Indian Love".*/
  
+ SELECT*
+ FROM actor; -- de aquí tomo el nombr ey apellido del actor (a.first_name, a.last_name)
+ 
+ SELECT*
+ FROM film_actor; -- de aquí tomo el id del actor --
+ 
+ SELECT*
+ FROM film; -- de aquí el actor_id
 
+-- SOLUCION --
+SELECT a.first_name, a.last_name  -- presento el nombre y apellido de los actores --
+      FROM actor a  
+          JOIN film_actor fa 
+              ON a.actor_id = fa.actor_id  -- Relaciono a los actores con películas.
+                JOIN film f 
+                    ON fa.film_id = f.film_id  -- uno film_actor con film para obtener el título de la película--
+					  WHERE f.title = 'Indian Love'; -- filtro para ver los actores que han participado en esta pelicula
+                      
+/*EJERCICIO_ 14
+Muestra el título de todas las películas que contengan la palabra "dog" o "cat" en su descripción*/
+SELECT title  
+       FROM film  
+           WHERE description LIKE '%dog%'  
+                 OR description LIKE '%cat%';
 
+/*EJERCICIO_15
+Hay algún actor o actriz que no aparezca en ninguna película en la tabla film_actor*/
 
+SELECT*
+FROM actor
+
+SELECT*
+FROM film_actor
+
+-- SOLUCION --
+SELECT a.actor_id, a.first_name, a.last_name  -- selecciono los datos que quiero que me muestre de la tabla actor --
+      FROM actor a  
+          LEFT JOIN film_actor fa 
+               ON a.actor_id = fa.actor_id  -- hago un LEFT JOIN con film_actor para incluir todos los actores, incluso aquellos que no tengan una coincidencia en film_actor --
+                  WHERE fa.actor_id IS NULL; -- Filtro los actores que no tienen películas asociadas=aquellos que no aparecen en la tabla film_actor.
+                  
+/*EJERCICIO_16
+Encuentra el título de todas las películas que fueron lanzadas entre el año 2005 y 2010*/
+
+SELECT title  
+FROM film  
+WHERE release_year BETWEEN 2005 AND 2010;
+
+/*EJERCICIO_17
+ Encuentra el título de todas las películas que son de la misma categoría que "Family"*/
+
+SELECT*
+FROM film; -- de aquí necesito el titulo --
+
+SELECT*
+FROM film_category; -- de aquí necesito el film_id y category_id --
+
+SELECT*
+FROM category; -- de aquí necesito el catgegory_id y el name--
+
+-- SOLUCION -- 
+SELECT f.title  
+     FROM film f  
+         JOIN film_category fc 
+            ON f.film_id = fc.film_id  -- uno film con film_category para conectar las películas con sus categorías.
+              JOIN category c 
+                  ON fc.category_id = c.category_id  -- Uno film_category con category para obtener el nombre de la categoría.
+                    WHERE c.name = 'Family';   -- Filtro solo las películas que pertenecen a la categoría "Family" --
+				
+				
 	
 
 
