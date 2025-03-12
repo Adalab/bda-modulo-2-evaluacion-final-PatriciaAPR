@@ -21,7 +21,6 @@ SELECT DISTINCT title, rating
 FROM film 
 WHERE rating = "PG-13"; -- con WHERE selecciono la condición que necesito para que me devuelva los resultados de la columna rating y le pongo un DISTINCT para que no se repitan los nombres de las peliculas --
 
-
 /*EJERCICIO_3 
 Encuentra el título y la descripción de todas las películas que contengan la palabra "amazing" en su descripción*/
 
@@ -34,18 +33,20 @@ WHERE description LIKE "%amazing%"; -- WHERE y LIKE filtra la columna en donde l
 
 SELECT title, length
 FROM film
-WHERE length > length;
+WHERE length > 120; -- el lenth es = a la duración de la pelicula, por lo que utilizo esta columna de la tabla film y utilizo where para agregarle la condición de mayor de 120 minutos
 
 /* EJERCICIO_5
 Recupera los nombres de todos los actores*/
 
-SELECT a.actor_id,
-FROM film_actor
+SELECT concat(first_name, " ", last_name) AS Nombre_completo
+FROM actor
+ORDER BY Nombre_completo; -- de la tabla de actor seleccioné el first y last name y juntando las columnas con concat le puse otro nombre a la columna, posteriormente la ordené. 
 
- AS `actor_id`,`a`.`first_name` AS `first_name`,`a`.`last_name` AS `last_name`,group_concat(distinct concat(`c`.`name`,': ',(select group_concat(`f`.`title` order by `f`.`title` ASC separator ', ') from ((`sakila`.`film` `f` join `sakila`.`film_category` `fc` on((`f`.`film_id` = `fc`.`film_id`))) join `sakila`.`film_actor` `fa` on((`f`.`film_id` = `fa`.`film_id`))) where ((`fc`.`category_id` = `c`.`category_id`) and (`fa`.`actor_id` = `a`.`actor_id`)))) order by `c`.`name` ASC separator '; ') AS `film_info` from (((`sakila`.`actor` `a` left join `sakila`.`film_actor` `fa` on((`a`.`actor_id` = `fa`.`actor_id`))) left join `sakila`.`film_category` `fc` on((`fa`.`film_id` = `fc`.`film_id`))) left join `sakila`.`category` `c` on((`fc`.`category_id` = `c`.`category_id`))) group by `a`.`actor_id`,`a`.`first_name`,`a`.`last_name`
+/* EJERCICIO_6
+Encuentra el nombre y apellido de los actores que tengan "Gibson" en su apellido*/
 
-
-
-
+SELECT first_name, last_name
+FROM actor
+WHERE last_name LIKE "%Gibson%";
 
 
