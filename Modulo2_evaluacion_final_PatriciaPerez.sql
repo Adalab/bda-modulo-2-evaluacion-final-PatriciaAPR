@@ -47,6 +47,67 @@ Encuentra el nombre y apellido de los actores que tengan "Gibson" en su apellido
 
 SELECT first_name, last_name
 FROM actor
-WHERE last_name LIKE "%Gibson%";
+WHERE last_name LIKE "%Gibson%"; -- Aquí utilizo la misma Query que en el ejercico 3 cambiando el parametro de busqueda
+
+/*EJERCICIO_7
+Encuentra los nombres de los actores que tengan un actor_id entre 10 y 20*/
+
+SELECT actor_id, first_name
+FROM actor
+WHERE actor_id BETWEEN 10 AND 20; -- con el WHERE filtro los datos y con el BETWEEN selecciono el rango de valores --
+
+/*EJERCICIO_8
+Encuentra el título de las películas en la tabla film que no sean ni "R" ni "PG-13" en cuanto a su clasificación*/
+
+SELECT title, rating
+FROM film
+WHERE rating NOT IN ("R", "PG-13"); -- on el WHERE filtro los datos y con NOT IN le digo que no quiero que me busque --
+
+/*EJERCICIO_9
+Encuentra la cantidad total de películas en cada clasificación de la tabla film y muestra la clasificación junto con el recuento*/
+
+SELECT rating, COUNT(*) AS total_peliculas  
+FROM film  
+GROUP BY rating
+ORDER BY total_peliculas DESC; -- selecciono la clasificación de la peli que los datos se encuentran en la columna de rating y 
+-- luego con COUNT cuento el número de registro de esa columna y le asigno un nombre los resultados los ordenos por el total de pelis de manera descendente --
+
+/*EJERCICIO_10
+Encuentra la cantidad total de películas alquiladas por cada cliente y muestra el ID del cliente, su nombre y apellido junto con la cantidad de películas alquiladas*/
+
+ SELECT*
+ FROM customer; -- Reviso que tengo las informaciones distribuidas en 2 tablas por lo que decido hacer un JOIN 
+ -- primero reviso la tabla de customer de aquí me tengo que traer el customer_id, first y last name --
+
+SELECT*
+FROM rental; -- Reviso la tabla de rental de aquí me tengo que traer el customer_id, y el rental_id. El customer_id me une ambas tabla, el rental_id--
+
+-- SOLUCION --
+SELECT c.customer_id, c.first_name, c.last_name, COUNT(r.rental_id) AS total_alquileres  -- selecciono las columnas que tenog que tener en cuenta y quiero que aparezcan 
+-- y le pido que quiero que de la tabla de rental me cuente los registros existentes.
+  FROM customer c  
+      JOIN rental r 
+          ON c.customer_id = r.customer_id  -- con JOIN uno la tabla rental con customer con las colunmas que tienen en común para obtener los alquileres de cada cliente --
+          GROUP BY c.customer_id, c.first_name, c.last_name  
+              ORDER BY total_alquileres DESC;
+
+/*EJERCICIO_11
+Encuentra la cantidad total de películas alquiladas por categoría y muestra el nombre de la categoría junto con el recuento de alquileres*/ 
+
+SELECT*
+FROM rental; -- reviso la tabla rental y veo que necesito la información de otra tabla por lo que tengo que hacer un JOIN. De esta tabla 
+
+SELECT*
+FROM category;
+
+
+
+
+
+	
+
+
+
+
 
 
