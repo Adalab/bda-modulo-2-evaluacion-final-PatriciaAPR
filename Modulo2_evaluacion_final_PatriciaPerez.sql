@@ -95,12 +95,48 @@ SELECT c.customer_id, c.first_name, c.last_name, COUNT(r.rental_id) AS total_alq
 Encuentra la cantidad total de películas alquiladas por categoría y muestra el nombre de la categoría junto con el recuento de alquileres*/ 
 
 SELECT*
-FROM rental; -- reviso la tabla rental y veo que necesito la información de otra tabla por lo que tengo que hacer un JOIN. De esta tabla 
+FROM rental; -- reviso la tabla rental y veo que necesito la información de otra tabla por lo que tengo que hacer un JOIN. De esta tabla necesitaré rental_id
 
 SELECT*
-FROM category;
+FROM category; -- de esta tabla necesito la categoria_id y el nombre 
+
+SELECT*
+FROM film_category;
+
+SELECT*
+FROM inventory; -- cantidad de peliculas alquiladas 
+
+-- SOLUCION --
+SELECT c.name AS categoria, COUNT(r.rental_id) AS total_alquileres -- aquí selecciono la columna de nombre de la tabla de categoria, la renombro y 
+-- luego cuento el número de registro  de la rentalid y la renombro como total de alquileres
+        FROM rental r  -- tomo estos datos porque aquí estan los alquileres realizados --
+            JOIN inventory i 
+                ON r.inventory_id = i.inventory_id  -- uno la tabla rental e inventario para saber qué películas fueron alquiladas --
+                   JOIN film f 
+                        ON i.film_id = f.film_id  -- uno la tabla film e inventario para saber los detalles de cada pelicula --
+                           JOIN film_category fc 
+							  ON f.film_id = fc.film_id  -- Uno film con film_category para saber a qué categoría pertenece cada película --
+								JOIN category c 
+                                    ON fc.category_id = c.category_id  -- Uno film_category con category para obtener los nombres de las categorías--
+                                       GROUP BY c.name  -- agrupo por categoria para contar los alquileres de cada peli --
+                                               ORDER BY total_alquileres DESC; -- ordeno los resultados de mayor a menor por el número de veces que se han alquilado --
+                                               
+                                               
+/*EJERCICIO_12
+Encuentra el promedio de duración de las películas para cada clasificación de la tabla film y muestra la clasificación junto con el promedio de duración*/
+
+SELECT*
+FROM film
+
+SELECT clasificacion, AVG(duracion) AS promedio_duracion  
+FROM film  
+GROUP BY clasificacion  
+ORDER BY promedio_duracion DESC;
 
 
+/*EJERCICIO_13
+ Encuentra el nombre y apellido de los actores que aparecen en la película con title "Indian Love".*/
+ 
 
 
 
